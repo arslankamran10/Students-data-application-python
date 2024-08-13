@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
+# In[6]:
+
+
+get_ipython().run_line_magic('matplotlib', 'inline')
+import matplotlib.pyplot as plt
 
 
 def welcome():
@@ -55,6 +59,13 @@ def a4(csv_reader,guardian):
     return("Enter correct guardian")
 
 
+def b1(students_df,race2):
+    race_filtered_data = students_df[students_df['Race'] == race2]
+    top_education = race_filtered_data.groupby(['Parental_involvement']).size().reset_index(name='Count')
+    top_education = top_education.sort_values(by='Count', ascending=False).head(3)
+    return top_education
+
+
 def b2(students_df, parental_involvement):
     if parental_involvement=="high" or parental_involvement=="low" or parental_involvement=="medium":
         parental_involvement_data = students_df[students_df['Parental_involvement'] == parental_involvement]
@@ -63,6 +74,64 @@ def b2(students_df, parental_involvement):
         return avg_absences
     else:
         return("Enter correct involvement.")
+
+
+def b3(students_df,min_attendance):
+        attendance_data = students_df[students_df['Attendance_rate'] > min_attendance]
+        avg_mathscores = attendance_data.groupby('Race')['Math_score'].mean()
+        return avg_mathscores
+
+
+def b4(students_df):
+    internet_access_data = students_df[students_df['Access_internet'] == 'yes']
+    average_reading_scores = internet_access_data.groupby('Sex')['Writing_score'].mean()
+    return average_reading_scores
+
+
+def c1(students_df):
+    race_counts = students_df['Race'].value_counts()
+    plt.figure()
+    plt.pie(race_counts, labels=race_counts.index, autopct='%1.1f%%', startangle=140)
+    plt.title('Proportion of Students Based on Race')
+    plt.axis('equal')  # Equal aspect ratio ensures the pie chart is circular.
+    plt.legend(loc='center',bbox_to_anchor=(1.3,1))
+    plt.show()
+    return("")
+
+
+def c2(students_df):
+    avg_writing_scores = students_df.groupby('Race')['Writing_score'].mean()
+    plt.figure(figsize=(6, 4))
+    avg_writing_scores.plot(kind='bar', color='blue')
+    plt.title('Average Writing Scores by Race')
+    plt.xlabel('Race')
+    plt.ylabel('Average Writing Score')
+    plt.xticks(rotation=0)
+    plt.show()
+    return("")
+
+
+def c3(students_df):
+    plt.figure(figsize=(10, 6))
+    plt.scatter(students_df['Reading_score'], students_df['Writing_score'])
+    plt.title('Relationship Between Reading and Writing Scores')
+    plt.xlabel('Reading Score')
+    plt.ylabel('Writing Score')
+    plt.grid(True)
+    plt.show()
+    return("")
+
+def c4(students_df):
+    avg_math_scores = students_df.groupby('Access_internet')['Math_score'].mean()
+    plt.figure(figsize=(10, 6))
+    avg_math_scores.plot(kind='bar', color=['#FF5733', '#33FF57'])
+    plt.title('Average Math Scores by Internet Access')
+    plt.xlabel('Internet Access')
+    plt.ylabel('Average Math Score')
+    plt.xticks(rotation=0)
+    plt.show()
+    return("")
+
 
 
 # In[ ]:
